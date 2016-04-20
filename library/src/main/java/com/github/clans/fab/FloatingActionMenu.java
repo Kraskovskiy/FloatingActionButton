@@ -408,7 +408,7 @@ public class FloatingActionMenu extends ViewGroup {
 
             View label = (View) fab.getTag(R.id.fab_label);
             if (label != null) {
-                int labelsOffset = (mUsingMenuLabel ? mMaxButtonWidth / 2 : fab.getMeasuredWidth() / 2) + mLabelsMargin;
+                int labelsOffset = (mUsingMenuLabel ? mMaxButtonWidth / 2 : fab.getMeasuredWidth() / 2) + mLabelsMargin - lp.leftMargin + lp.rightMargin;
                 int labelXNearButton = mLabelsPosition == LABELS_POSITION_LEFT
                         ? buttonsHorizontalCenter - labelsOffset
                         : buttonsHorizontalCenter + labelsOffset;

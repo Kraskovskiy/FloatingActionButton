@@ -1123,23 +1123,23 @@ public class FloatingActionMenu extends ViewGroup {
         private void offsetIfNeeded(CoordinatorLayout parent, FloatingActionMenu fab) {
             Rect padding = fab.getMenuButton().getShadowRect();
             if (padding != null && padding.centerX() > 0 && padding.centerY() > 0) {
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                MarginLayoutParams lp = (MarginLayoutParams) fab.getMenuButton().getLayoutParams();
                 int offsetTB = 0;
                 int offsetLR = 0;
-                if (fab.getRight() >= parent.getWidth() - lp.rightMargin) {
+                if (fab.getMenuButton().getRight() >= parent.getWidth() - lp.rightMargin) {
                     offsetLR = padding.right;
-                } else if (fab.getLeft() <= lp.leftMargin) {
+                } else if (fab.getMenuButton().getLeft() <= lp.leftMargin) {
                     offsetLR = -padding.left;
                 }
 
-                if (fab.getBottom() >= parent.getBottom() - lp.bottomMargin) {
+                if (fab.getMenuButton().getBottom() >= parent.getBottom() - lp.bottomMargin) {
                     offsetTB = padding.bottom;
-                } else if (fab.getTop() <= lp.topMargin) {
+                } else if (fab.getMenuButton().getTop() <= lp.topMargin) {
                     offsetTB = -padding.top;
                 }
 
-                fab.offsetTopAndBottom(offsetTB);
-                fab.offsetLeftAndRight(offsetLR);
+                fab.getMenuButton().offsetTopAndBottom(offsetTB);
+                fab.getMenuButton().offsetLeftAndRight(offsetLR);
             }
 
         }

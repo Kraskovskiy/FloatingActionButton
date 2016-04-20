@@ -12,6 +12,7 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Xfermode;
 import android.graphics.drawable.ColorDrawable;
@@ -32,13 +33,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class FloatingActionButton extends ImageButton {
+public class FloatingActionButton extends VisibilityAwareImageButton {
 
     public static final int SIZE_NORMAL = 0;
     public static final int SIZE_MINI = 1;
@@ -97,6 +96,7 @@ public class FloatingActionButton extends ImageButton {
     private boolean mShouldSetProgress;
     private int mProgressMax = 100;
     private boolean mShowProgressBackground;
+    private Rect mShadowRect;
 
     public FloatingActionButton(Context context) {
         this(context, null);
@@ -668,6 +668,10 @@ public class FloatingActionButton extends ImageButton {
         }
     }
 
+    public Rect getShadowRect() {
+        return mShadowRect;
+    }
+
     private class Shadow extends Drawable {
 
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -700,6 +704,7 @@ public class FloatingActionButton extends ImageButton {
         public void draw(Canvas canvas) {
             canvas.drawCircle(calculateCenterX(), calculateCenterY(), mRadius, mPaint);
             canvas.drawCircle(calculateCenterX(), calculateCenterY(), mRadius, mErase);
+            mShadowRect = canvas.getClipBounds();
         }
 
         @Override

@@ -392,7 +392,9 @@ public class FloatingActionMenu extends ViewGroup {
 
             if (fab.getVisibility() == GONE) continue;
 
-            int childX = buttonsHorizontalCenter - fab.getMeasuredWidth() / 2;
+            MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+
+            int childX = buttonsHorizontalCenter - fab.getMeasuredWidth() / 2 + lp.leftMargin - lp.rightMargin;
             int childY = openUp ? nextY - fab.getMeasuredHeight() - mButtonSpacing : nextY;
 
             if (fab != mMenuButton) {

@@ -1040,7 +1040,7 @@ public class FloatingActionMenu extends ViewGroup {
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
             if (lp.getAnchorId() != appBarLayout.getId()) {
                 return false;
-            } else if (child.getMenuButton().getUserSetVisibility() != 0) {
+            } else if (child.getMenuButton().getVisibility() != 0) {
                 return false;
             } else {
                 if (this.mTmpRect == null) {

@@ -7,14 +7,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -33,7 +27,6 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-@CoordinatorLayout.DefaultBehavior(FloatingActionMenu.Behavior.class)
 public class FloatingActionMenu extends ViewGroup {
 
     private static final int ANIMATION_DURATION = 300;
@@ -192,10 +185,6 @@ public class FloatingActionMenu extends ViewGroup {
         initMenuButtonAnimations(attr);
 
         attr.recycle();
-    }
-
-    FloatingActionButton getMenuButton() {
-        return mMenuButton;
     }
 
     private void initMenuButtonAnimations(TypedArray attr) {
@@ -599,17 +588,17 @@ public class FloatingActionMenu extends ViewGroup {
     GestureDetector mGestureDetector = new GestureDetector(getContext(),
             new GestureDetector.SimpleOnGestureListener() {
 
-                @Override
-                public boolean onDown(MotionEvent e) {
-                    return mIsSetClosedOnTouchOutside && isOpened();
-                }
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return mIsSetClosedOnTouchOutside && isOpened();
+        }
 
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    close(mIsAnimated);
-                    return true;
-                }
-            });
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            close(mIsAnimated);
+            return true;
+        }
+    });
 
     /* ===== API methods ===== */
 
@@ -1011,152 +1000,5 @@ public class FloatingActionMenu extends ViewGroup {
 
     public void setOnMenuButtonClickListener(OnClickListener clickListener) {
         mMenuButton.setOnClickListener(clickListener);
-    }
-
-    public static class Behavior extends CoordinatorLayout.Behavior<FloatingActionMenu> {
-        private static final boolean SNACKBAR_BEHAVIOR_ENABLED;
-        private ValueAnimatorCompat mFabTranslationYAnimator;
-        private float mFabTranslationY;
-        private Rect mTmpRect;
-
-        public Behavior() {
-        }
-
-        public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionMenu child, View dependency) {
-            return SNACKBAR_BEHAVIOR_ENABLED && dependency instanceof Snackbar.SnackbarLayout;
-        }
-
-        public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionMenu child, View dependency) {
-            if (dependency instanceof Snackbar.SnackbarLayout) {
-                this.updateFabTranslationForSnackbar(parent, child, dependency);
-            } else if (dependency instanceof AppBarLayout) {
-                this.updateFabVisibility(parent, (AppBarLayout) dependency, child);
-            }
-
-            return false;
-        }
-
-        private boolean updateFabVisibility(CoordinatorLayout parent, AppBarLayout appBarLayout, FloatingActionMenu child) {
-            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-            if (lp.getAnchorId() != appBarLayout.getId()) {
-                return false;
-            } else if (child.getMenuButton().getVisibility() != 0) {
-                return false;
-            } else {
-                if (this.mTmpRect == null) {
-                    this.mTmpRect = new Rect();
-                }
-
-                Rect rect = this.mTmpRect;
-                ViewGroupUtils.getDescendantRect(parent, appBarLayout, rect);
-                //TODO appBarLayout.getMinimumHeightForVisibleOverlappingContent() is package
-                if (rect.bottom <= 100) {//appBarLayout.getMinimumHeightForVisibleOverlappingContent()) {
-                    child.hideMenuButton(true);
-                } else {
-                    child.showMenuButton(true);
-                }
-
-                return true;
-            }
-        }
-
-        private void updateFabTranslationForSnackbar(CoordinatorLayout parent, final FloatingActionMenu fab, View snackbar) {
-            float targetTransY = this.getFabTranslationYForSnackbar(parent, fab);
-            if (this.mFabTranslationY != targetTransY) {
-                float currentTransY = ViewCompat.getTranslationY(fab);
-                if (this.mFabTranslationYAnimator != null && this.mFabTranslationYAnimator.isRunning()) {
-                    this.mFabTranslationYAnimator.cancel();
-                }
-
-                if (fab.isShown() && Math.abs(currentTransY - targetTransY) > (float) fab.getHeight() * 0.667F) {
-                    if (this.mFabTranslationYAnimator == null) {
-                        this.mFabTranslationYAnimator = ViewUtils.createAnimator();
-                        this.mFabTranslationYAnimator.setInterpolator(AnimationUtilsNative.FAST_OUT_SLOW_IN_INTERPOLATOR);
-                        this.mFabTranslationYAnimator.setUpdateListener(new ValueAnimatorCompat.AnimatorUpdateListener() {
-                            public void onAnimationUpdate(ValueAnimatorCompat animator) {
-                                ViewCompat.setTranslationY(fab, animator.getAnimatedFloatValue());
-                            }
-                        });
-                    }
-
-                    this.mFabTranslationYAnimator.setFloatValues(currentTransY, targetTransY);
-                    this.mFabTranslationYAnimator.start();
-                } else {
-                    ViewCompat.setTranslationY(fab, targetTransY);
-                }
-
-                this.mFabTranslationY = targetTransY;
-            }
-        }
-
-        private float getFabTranslationYForSnackbar(CoordinatorLayout parent, FloatingActionMenu fab) {
-            float minOffset = 0.0F;
-            List dependencies = parent.getDependencies(fab);
-            int i = 0;
-
-            for (int z = dependencies.size(); i < z; ++i) {
-                View view = (View) dependencies.get(i);
-                if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(fab, view)) {
-                    minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
-                }
-            }
-
-            return minOffset;
-        }
-
-        public boolean onLayoutChild(CoordinatorLayout parent, FloatingActionMenu child, int layoutDirection) {
-            List dependencies = parent.getDependencies(child);
-            int i = 0;
-
-            for (int count = dependencies.size(); i < count; ++i) {
-                View dependency = (View) dependencies.get(i);
-                if (dependency instanceof AppBarLayout && this.updateFabVisibility(parent, (AppBarLayout) dependency, child)) {
-                    break;
-                }
-            }
-
-            parent.onLayoutChild(child, layoutDirection);
-            offsetIfNeeded(parent, child);
-            return true;
-        }
-
-        private void offsetIfNeeded(CoordinatorLayout parent, FloatingActionMenu fab) {
-            Rect padding = fab.getMenuButton().getShadowRect();
-            if (padding != null && padding.centerX() > 0 && padding.centerY() > 0) {
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                int offsetTB = 0;
-                int offsetLR = 0;
-                if (fab.getRight() >= parent.getWidth() - lp.rightMargin) {
-                    offsetLR = padding.right;
-                } else if (fab.getLeft() <= lp.leftMargin) {
-                    offsetLR = -padding.left;
-                }
-
-                if (fab.getBottom() >= parent.getBottom() - lp.bottomMargin) {
-                    offsetTB = padding.bottom;
-                } else if (fab.getTop() <= lp.topMargin) {
-                    offsetTB = -padding.top;
-                }
-
-                fab.offsetTopAndBottom(offsetTB);
-                fab.offsetLeftAndRight(offsetLR);
-            }
-
-        }
-
-        static {
-            SNACKBAR_BEHAVIOR_ENABLED = Build.VERSION.SDK_INT >= 11;
-        }
-    }
-
-    public abstract static class OnVisibilityChangedListener {
-        public OnVisibilityChangedListener() {
-        }
-
-        public void onShown(FloatingActionButton fab) {
-        }
-
-        public void onHidden(FloatingActionButton fab) {
-        }
     }
 }

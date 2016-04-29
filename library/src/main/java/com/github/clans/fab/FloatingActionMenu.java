@@ -101,6 +101,7 @@ public class FloatingActionMenu extends ViewGroup {
     private boolean mIsSetClosedOnTouchOutside;
     private int mOpenDirection;
     private OnMenuToggleListener mToggleListener;
+    private boolean right = false;
 
     private ValueAnimator mShowBackgroundAnimator;
     private ValueAnimator mHideBackgroundAnimator;
@@ -358,10 +359,14 @@ public class FloatingActionMenu extends ViewGroup {
         setMeasuredDimension(width, height);
     }
 
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int buttonsHorizontalCenter = mLabelsPosition == LABELS_POSITION_LEFT
-                ? (r - l) / 2//r - l - mMaxButtonWidth / 2 - getPaddingRight()
+                ? right ? r - l - mMaxButtonWidth / 2 - getPaddingRight() : (r - l) / 2
                 : mMaxButtonWidth / 2 + getPaddingLeft();
         boolean openUp = mOpenDirection == OPEN_UP;
 

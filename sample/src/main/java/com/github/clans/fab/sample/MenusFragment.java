@@ -68,6 +68,7 @@ public class MenusFragment extends Fragment {
         programFab1.setLabelText(getString(R.string.lorem_ipsum));
         programFab1.setImageResource(R.drawable.ic_edit);
         menuRed.addMenuButton(programFab1);
+        menuRed.setRight(true);
         programFab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -347,7 +347,7 @@ public class FloatingActionMenu extends ViewGroup {
 
         width = Math.max(mMaxButtonWidth, maxLabelWidth + mLabelsMargin) + getPaddingLeft() + getPaddingRight();
 
-        height += mButtonSpacing * (mButtonsCount - 1) + getPaddingTop() + getPaddingBottom();
+        height += mButtonSpacing * (mButtonsCount - 1) + getPaddingTop() + Util.dpToPx(getContext(), 4);
         height = adjustForOvershoot(height);
 
         if (getLayoutParams().width == LayoutParams.MATCH_PARENT) {
@@ -373,7 +373,7 @@ public class FloatingActionMenu extends ViewGroup {
         boolean openUp = mOpenDirection == OPEN_UP;
 
         int menuButtonTop = openUp
-                ? b - t - mMenuButton.getMeasuredHeight() - getPaddingBottom()
+                ? b - t - mMenuButton.getMeasuredHeight() - Util.dpToPx(getContext(), 4)
                 : getPaddingTop();
         int menuButtonLeft = buttonsHorizontalCenter - mMenuButton.getMeasuredWidth() / 2;
 

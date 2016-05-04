@@ -53,6 +53,7 @@ public class FloatingActionMenu extends ViewGroup {
 
     private int mButtonSpacing = Util.dpToPx(getContext(), 0f);
     private FloatingActionButton mMenuButton;
+    private View mBackground;
     private int mMaxButtonWidth;
     private int mLabelsMargin = Util.dpToPx(getContext(), 0f);
     private int mLabelsVerticalOffset = Util.dpToPx(getContext(), 0f);
@@ -105,7 +106,6 @@ public class FloatingActionMenu extends ViewGroup {
 
     private ValueAnimator mShowBackgroundAnimator;
     private ValueAnimator mHideBackgroundAnimator;
-    private int mBackgroundColor;
 
     private int mLabelsPosition;
     private Context mLabelsContext;
@@ -172,7 +172,6 @@ public class FloatingActionMenu extends ViewGroup {
         mMenuFabSize = attr.getInt(R.styleable.FloatingActionMenu_menu_fab_size, FloatingActionButton.SIZE_NORMAL);
         mLabelsStyle = attr.getResourceId(R.styleable.FloatingActionMenu_menu_labels_style, 0);
         mOpenDirection = attr.getInt(R.styleable.FloatingActionMenu_menu_openDirection, OPEN_UP);
-        mBackgroundColor = attr.getColor(R.styleable.FloatingActionMenu_menu_backgroundColor, Color.TRANSPARENT);
 
         if (attr.hasValue(R.styleable.FloatingActionMenu_menu_fab_label)) {
             mUsingMenuLabel = true;
@@ -190,6 +189,7 @@ public class FloatingActionMenu extends ViewGroup {
 
         initBackgroundDimAnimation();
         createMenuButton();
+        createBackground();
         initMenuButtonAnimations(attr);
 
         attr.recycle();
@@ -210,34 +210,28 @@ public class FloatingActionMenu extends ViewGroup {
     }
 
     private void initBackgroundDimAnimation() {
-        final int maxAlpha = Color.alpha(mBackgroundColor);
-        final int red = Color.red(mBackgroundColor);
-        final int green = Color.green(mBackgroundColor);
-        final int blue = Color.blue(mBackgroundColor);
 
-        mShowBackgroundAnimator = ValueAnimator.ofInt(0, maxAlpha);
+        mShowBackgroundAnimator = ValueAnimator.ofFloat(0, 1);
         mShowBackgroundAnimator.setDuration(ANIMATION_DURATION);
         mShowBackgroundAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Integer alpha = (Integer) animation.getAnimatedValue();
-                setBackgroundColor(Color.argb(alpha, red, green, blue));
+                mBackground.setAlpha((Float) animation.getAnimatedValue());
             }
         });
 
-        mHideBackgroundAnimator = ValueAnimator.ofInt(maxAlpha, 0);
+        mHideBackgroundAnimator = ValueAnimator.ofFloat(1, 0);
         mHideBackgroundAnimator.setDuration(ANIMATION_DURATION);
         mHideBackgroundAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Integer alpha = (Integer) animation.getAnimatedValue();
-                setBackgroundColor(Color.argb(alpha, red, green, blue));
+                mBackground.setAlpha((Float) animation.getAnimatedValue());
             }
         });
     }
 
     private boolean isBackgroundEnabled() {
-        return mBackgroundColor != Color.TRANSPARENT;
+        return mBackground != null;
     }
 
     private void initPadding(int padding) {
@@ -245,6 +239,13 @@ public class FloatingActionMenu extends ViewGroup {
         mLabelsPaddingRight = padding;
         mLabelsPaddingBottom = padding;
         mLabelsPaddingLeft = padding;
+    }
+
+    private void createBackground() {
+        mBackground = new View(getContext());
+        addView(mBackground, 0);
+        mBackground.setBackgroundResource(R.drawable.floating_action_menu_background);
+        mBackground.setAlpha(0);
     }
 
     private void createMenuButton() {
@@ -314,21 +315,22 @@ public class FloatingActionMenu extends ViewGroup {
         int maxLabelWidth = 0;
 
         measureChildWithMargins(mImageToggle, widthMeasureSpec, 0, heightMeasureSpec, 0);
+        measureChildWithMargins(mBackground, widthMeasureSpec, 0, heightMeasureSpec, 0);
 
-        for (int i = 0; i < mButtonsCount; i++) {
+        for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
 
-            if (child.getVisibility() == GONE || child == mImageToggle) continue;
+            if (child.getVisibility() == GONE || child == mImageToggle || !(child instanceof FloatingActionButton)) continue;
 
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
             mMaxButtonWidth = Math.max(mMaxButtonWidth, child.getMeasuredWidth());
         }
 
-        for (int i = 0; i < mButtonsCount; i++) {
+        for (int i = 0; i < getChildCount(); i++) {
             int usedWidth = 0;
             View child = getChildAt(i);
 
-            if (child.getVisibility() == GONE || child == mImageToggle) continue;
+            if (child.getVisibility() == GONE || child == mImageToggle || !(child instanceof FloatingActionButton)) continue;
 
             usedWidth += child.getMeasuredWidth();
             height += child.getMeasuredHeight();
@@ -383,15 +385,16 @@ public class FloatingActionMenu extends ViewGroup {
 
         mImageToggle.layout(imageLeft, imageTop, imageLeft + mImageToggle.getMeasuredWidth(),
                 imageTop + mImageToggle.getMeasuredHeight());
+        mBackground.layout(l, t, r, b);
 
         int nextY = openUp
                 ? menuButtonTop + mMenuButton.getMeasuredHeight() + mButtonSpacing
                 : menuButtonTop;
 
-        for (int i = mButtonsCount - 1; i >= 0; i--) {
+        for (int i = getChildCount() - 1; i >= 0; i--) {
             View child = getChildAt(i);
 
-            if (child == mImageToggle) continue;
+            if (child == mImageToggle || !(child instanceof FloatingActionButton)) continue;
 
             FloatingActionButton fab = (FloatingActionButton) child;
 
@@ -460,9 +463,9 @@ public class FloatingActionMenu extends ViewGroup {
     }
 
     private void createLabels() {
-        for (int i = 0; i < mButtonsCount; i++) {
+        for (int i = 0; i < getChildCount(); i++) {
 
-            if (getChildAt(i) == mImageToggle) continue;
+            if (getChildAt(i) == mImageToggle || !(getChildAt(i) instanceof FloatingActionButton)) continue;
 
             final FloatingActionButton fab = (FloatingActionButton) getChildAt(i);
 

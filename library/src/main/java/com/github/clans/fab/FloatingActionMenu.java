@@ -694,6 +694,10 @@ public class FloatingActionMenu extends ViewGroup {
     }
 
     public void close(final boolean animate) {
+        close(animate, mAnimationDelayPerItem);
+    }
+
+    public void close(final boolean animate, int animationDelay) {
         if (isOpened()) {
             if (isBackgroundEnabled()) {
                 mHideBackgroundAnimator.start();
@@ -732,7 +736,7 @@ public class FloatingActionMenu extends ViewGroup {
                             }
                         }
                     }, delay);
-                    delay += mAnimationDelayPerItem;
+                    delay += animationDelay;
                 }
             }
 
@@ -745,7 +749,7 @@ public class FloatingActionMenu extends ViewGroup {
                         mToggleListener.onMenuToggle(false);
                     }
                 }
-            }, ++counter * mAnimationDelayPerItem);
+            }, ++counter * animationDelay);
         }
     }
 

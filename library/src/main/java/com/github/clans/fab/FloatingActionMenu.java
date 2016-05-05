@@ -705,9 +705,17 @@ public class FloatingActionMenu extends ViewGroup {
 
             if (mIconAnimated) {
                 if (mIconToggleSet != null) {
-                    mIconToggleSet.start();
+                    if (animationDelay == 0) {
+                        mIconToggleSet.setDuration(animationDelay).start();
+                    } else {
+                        mIconToggleSet.start();
+                    }
                 } else {
-                    mCloseAnimatorSet.start();
+                    if (animationDelay == 0) {
+                        mCloseAnimatorSet.setDuration(animationDelay).start();
+                    } else {
+                        mCloseAnimatorSet.start();
+                    }
                     mOpenAnimatorSet.cancel();
                 }
             }

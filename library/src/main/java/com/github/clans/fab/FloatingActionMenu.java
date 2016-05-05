@@ -51,6 +51,7 @@ public class FloatingActionMenu extends ViewGroup {
     private AnimatorSet mCloseAnimatorSet = new AnimatorSet();
     private AnimatorSet mIconToggleSet;
 
+    private int mBottomPadding = Util.dpToPx(getContext(), 4f);
     private int mButtonSpacing = Util.dpToPx(getContext(), 0f);
     private FloatingActionButton mMenuButton;
     private View mBackground;
@@ -132,6 +133,7 @@ public class FloatingActionMenu extends ViewGroup {
     private void init(Context context, AttributeSet attrs) {
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.FloatingActionMenu, 0, 0);
         mButtonSpacing = attr.getDimensionPixelSize(R.styleable.FloatingActionMenu_menu_buttonSpacing, mButtonSpacing);
+        mBottomPadding = attr.getDimensionPixelSize(R.styleable.FloatingActionMenu_menu_bottomPadding, mBottomPadding);
         mLabelsMargin = attr.getDimensionPixelSize(R.styleable.FloatingActionMenu_menu_labels_margin, mLabelsMargin);
         mLabelsPosition = attr.getInt(R.styleable.FloatingActionMenu_menu_labels_position, LABELS_POSITION_LEFT);
         mLabelsShowAnimation = attr.getResourceId(R.styleable.FloatingActionMenu_menu_labels_showAnimation,
@@ -347,7 +349,7 @@ public class FloatingActionMenu extends ViewGroup {
 
         width = Math.max(mMaxButtonWidth, maxLabelWidth + mLabelsMargin) + getPaddingLeft() + getPaddingRight();
 
-        height += mButtonSpacing * (mButtonsCount - 1) + getPaddingTop() + Util.dpToPx(getContext(), 4);
+        height += mButtonSpacing * (mButtonsCount - 1) + getPaddingTop() + mBottomPadding;
         height = adjustForOvershoot(height);
 
         if (getLayoutParams().width == LayoutParams.MATCH_PARENT) {
@@ -373,7 +375,7 @@ public class FloatingActionMenu extends ViewGroup {
         boolean openUp = mOpenDirection == OPEN_UP;
 
         int menuButtonTop = openUp
-                ? b - t - mMenuButton.getMeasuredHeight() - Util.dpToPx(getContext(), 4)
+                ? b - t - mMenuButton.getMeasuredHeight() - mBottomPadding
                 : getPaddingTop();
         int menuButtonLeft = buttonsHorizontalCenter - mMenuButton.getMeasuredWidth() / 2;
 

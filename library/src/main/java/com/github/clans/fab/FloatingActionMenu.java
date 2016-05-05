@@ -693,11 +693,15 @@ public class FloatingActionMenu extends ViewGroup {
         }
     }
 
+    public void closeImmediate() {
+        close(false, 0);
+    }
+
     public void close(final boolean animate) {
         close(animate, mAnimationDelayPerItem);
     }
 
-    public void close(final boolean animate, int animationDelay) {
+    private void close(final boolean animate, int animationDelay) {
         if (isOpened()) {
             if (isBackgroundEnabled()) {
                 mHideBackgroundAnimator.start();

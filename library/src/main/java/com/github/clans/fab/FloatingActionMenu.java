@@ -104,6 +104,7 @@ public class FloatingActionMenu extends ViewGroup {
     private boolean mIsSetClosedOnTouchOutside;
     private int mOpenDirection;
     private OnMenuToggleListener mToggleListener;
+    private OnMenuAdvancedToggleListener mAdvancedToggleListener;
     private boolean right = false;
 
     private ValueAnimator mShowBackgroundAnimator;
@@ -116,6 +117,11 @@ public class FloatingActionMenu extends ViewGroup {
 
     public interface OnMenuToggleListener {
         void onMenuToggle(boolean opened);
+    }
+
+    public interface OnMenuAdvancedToggleListener {
+        void onMenuStartToggling(boolean open);
+        void onMenuToggled(boolean open);
     }
 
     public FloatingActionMenu(Context context) {
@@ -680,6 +686,9 @@ public class FloatingActionMenu extends ViewGroup {
 
     public void open(final boolean animate) {
         if (!isOpened()) {
+            if (mAdvancedToggleListener != null) {
+                mAdvancedToggleListener.onMenuStartToggling(true);
+            }
             if (isBackgroundEnabled()) {
                 mShowBackgroundAnimator.start();
             }
@@ -729,6 +738,9 @@ public class FloatingActionMenu extends ViewGroup {
                     if (mToggleListener != null) {
                         mToggleListener.onMenuToggle(true);
                     }
+                    if (mAdvancedToggleListener != null) {
+                        mAdvancedToggleListener.onMenuToggled(true);
+                    }
                 }
             }, ++counter * mAnimationDelayPerItem);
         }
@@ -744,6 +756,9 @@ public class FloatingActionMenu extends ViewGroup {
 
     private void close(final boolean animate, int animationDelay) {
         if (isOpened()) {
+            if (mAdvancedToggleListener != null) {
+                mAdvancedToggleListener.onMenuStartToggling(false);
+            }
             if (isBackgroundEnabled()) {
                 if (animationDelay == 0) {
                     mHideBackgroundAnimator.setDuration(animationDelay).start();
@@ -804,6 +819,9 @@ public class FloatingActionMenu extends ViewGroup {
 
                     if (mToggleListener != null) {
                         mToggleListener.onMenuToggle(false);
+                    }
+                    if (mAdvancedToggleListener != null) {
+                        mAdvancedToggleListener.onMenuToggled(false);
                     }
                 }
             }, ++counter * animationDelay);

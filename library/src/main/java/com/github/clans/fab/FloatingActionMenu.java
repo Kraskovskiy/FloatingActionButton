@@ -873,6 +873,10 @@ public class FloatingActionMenu extends ViewGroup {
         mToggleListener = listener;
     }
 
+    public void setOnMenuAdvancedToggleListener(OnMenuAdvancedToggleListener listener) {
+        mAdvancedToggleListener = listener;
+    }
+
     public void setIconAnimated(boolean animated) {
         mIconAnimated = animated;
     }

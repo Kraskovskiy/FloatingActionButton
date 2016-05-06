@@ -1,5 +1,6 @@
 package com.github.clans.fab;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -221,6 +222,24 @@ public class FloatingActionMenu extends ViewGroup {
                 mBackground.setAlpha((Float) animation.getAnimatedValue());
             }
         });
+        mShowBackgroundAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBackground.setClickable(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
 
         mHideBackgroundAnimator = ValueAnimator.ofFloat(1, 0);
         mHideBackgroundAnimator.setDuration(ANIMATION_DURATION);
@@ -228,6 +247,21 @@ public class FloatingActionMenu extends ViewGroup {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 mBackground.setAlpha((Float) animation.getAnimatedValue());
+            }
+        });
+        mHideBackgroundAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBackground.setClickable(false);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
             }
         });
     }
@@ -248,6 +282,13 @@ public class FloatingActionMenu extends ViewGroup {
         addView(mBackground, 0);
         mBackground.setBackgroundResource(R.drawable.floating_action_menu_background);
         mBackground.setAlpha(0);
+        mBackground.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close(true);
+            }
+        });
+        mBackground.setClickable(false);
     }
 
     private void createMenuButton() {
@@ -704,7 +745,11 @@ public class FloatingActionMenu extends ViewGroup {
     private void close(final boolean animate, int animationDelay) {
         if (isOpened()) {
             if (isBackgroundEnabled()) {
-                mHideBackgroundAnimator.start();
+                if (animationDelay == 0) {
+                    mHideBackgroundAnimator.setDuration(animationDelay).start();
+                } else {
+                    mHideBackgroundAnimator.start();
+                }
             }
 
             if (mIconAnimated) {

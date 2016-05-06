@@ -129,7 +129,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         fab:menu_fab_size="normal"
-        android:visibility="gone"
         fab:menu_colorNormal="#1565C0"
         fab:menu_colorPressed="#2272CD"
         fab:menu_colorRipple="#62B2FF">

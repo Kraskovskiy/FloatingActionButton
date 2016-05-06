@@ -763,7 +763,7 @@ public class FloatingActionMenu extends ViewGroup {
                 if (animationDelay == 0) {
                     mHideBackgroundAnimator.setDuration(animationDelay).start();
                 } else {
-                    mHideBackgroundAnimator.start();
+                    mHideBackgroundAnimator.setDuration(ANIMATION_DURATION).start();
                 }
             }
 
@@ -772,13 +772,13 @@ public class FloatingActionMenu extends ViewGroup {
                     if (animationDelay == 0) {
                         mIconToggleSet.setDuration(animationDelay).start();
                     } else {
-                        mIconToggleSet.start();
+                        mIconToggleSet.setDuration(ANIMATION_DURATION).start();
                     }
                 } else {
                     if (animationDelay == 0) {
                         mCloseAnimatorSet.setDuration(animationDelay).start();
                     } else {
-                        mCloseAnimatorSet.start();
+                        mCloseAnimatorSet.setDuration(ANIMATION_DURATION).start();
                     }
                     mOpenAnimatorSet.cancel();
                 }

@@ -198,7 +198,7 @@ public class FloatingActionMenu extends ViewGroup {
 
         initBackgroundDimAnimation();
         createMenuButton();
-        createBackground();
+        //createBackground();
         initMenuButtonAnimations(attr);
 
         attr.recycle();
@@ -364,7 +364,9 @@ public class FloatingActionMenu extends ViewGroup {
         int maxLabelWidth = 0;
 
         measureChildWithMargins(mImageToggle, widthMeasureSpec, 0, heightMeasureSpec, 0);
-        measureChildWithMargins(mBackground, widthMeasureSpec, 0, heightMeasureSpec, 0);
+        if (mBackground != null) {
+            measureChildWithMargins(mBackground, widthMeasureSpec, 0, heightMeasureSpec, 0);
+        }
 
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
@@ -434,7 +436,9 @@ public class FloatingActionMenu extends ViewGroup {
 
         mImageToggle.layout(imageLeft, imageTop, imageLeft + mImageToggle.getMeasuredWidth(),
                 imageTop + mImageToggle.getMeasuredHeight());
-        mBackground.layout(l, t, r, b);
+        if (mBackground != null) {
+            mBackground.layout(l, t, r, b);
+        }
 
         int nextY = openUp
                 ? menuButtonTop + mMenuButton.getMeasuredHeight() + mButtonSpacing

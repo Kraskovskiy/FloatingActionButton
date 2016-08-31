@@ -120,39 +120,34 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu_blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="220dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
         fab:menu_fab_size="normal"
         fab:menu_colorNormal="#1565C0"
         fab:menu_colorPressed="#2272CD"
         fab:menu_colorRipple="#62B2FF">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star"
-            style="@style/MenuButtonsSmall" />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fab14"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_star"-->
+            <!--style="@style/MenuButtonsSmall" />-->
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star"
-            style="@style/MenuButtonsSmall" />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fab24"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_star"-->
+            <!--style="@style/MenuButtonsSmall" />-->
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab34"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star"
-            style="@style/MenuButtonsSmall" />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fab34"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_star"-->
+            <!--style="@style/MenuButtonsSmall" />-->
 
     </com.github.clans.fab.FloatingActionMenu>
 
@@ -218,6 +213,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:visibility="gone"
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_singleLine="true"
         fab:menu_fab_label="Menu label">

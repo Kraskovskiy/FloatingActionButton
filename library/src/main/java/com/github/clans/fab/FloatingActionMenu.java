@@ -198,7 +198,7 @@ public class FloatingActionMenu extends ViewGroup {
 
         initBackgroundDimAnimation();
         createMenuButton();
-        //createBackground();
+        createBackground();
         initMenuButtonAnimations(attr);
 
         attr.recycle();
@@ -225,7 +225,7 @@ public class FloatingActionMenu extends ViewGroup {
         mShowBackgroundAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                mBackground.setAlpha((Float) animation.getAnimatedValue());
+                //mBackground.setAlpha((Float) animation.getAnimatedValue());
             }
         });
         mShowBackgroundAnimator.addListener(new Animator.AnimatorListener() {
@@ -252,7 +252,7 @@ public class FloatingActionMenu extends ViewGroup {
         mHideBackgroundAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                mBackground.setAlpha((Float) animation.getAnimatedValue());
+                //mBackground.setAlpha((Float) animation.getAnimatedValue());
             }
         });
         mHideBackgroundAnimator.addListener(new Animator.AnimatorListener() {
